@@ -1,0 +1,19 @@
+---
+title: "Covid-19 in Netherlands"
+date: "`r Sys.Date()`"
+output: 
+  bookdown::html_document2:
+    css: "style.css"
+    theme: journal
+    toc: yes
+    toc_float: yes
+bibliography: reference.bib
+biblio-style: authoryear-comp
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+```
+
+# Jiaying
