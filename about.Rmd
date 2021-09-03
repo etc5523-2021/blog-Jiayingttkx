@@ -1,5 +1,5 @@
 ---
-title: "About this blog"
+title: "About Me"
 css: "style.css"
 ---
 
@@ -14,3 +14,18 @@ For feedbacks or suggestions please contact me through :
 <i class="fa fa-github"></i> [Jiaying Zhang](https://github.com/Jiayingttkx)
 
 <i class="fa fa-weibo"> </i> [Jiaying Zhang](https://weibo.com/u/6553328377/home)
+
+```{css, echo = FALSE}
+.distill-site-nav {
+    color: rgba(255, 255, 255, 0.8);
+    background-color: #2793e8;
+    font-size: 15px;
+    font-weight: 300;
+}
+h1{
+  color: #2793e8;
+}
+h2{
+  color: #666666;
+}
+```

@@ -34,6 +34,7 @@ h2{
   color: #666666;
 }
 ```
+
 ```{r loadcoronadata}
 co <- read.csv("https://raw.githubusercontent.com/RamiKrispin/coronavirus/master/csv/coronavirus.csv", stringsAsFactors = FALSE) %>%
   dplyr::mutate(country = ifelse(country == "United Arab Emirates", "UAE", country),
@@ -55,7 +56,7 @@ testgovdata <- readr::read_csv(here::here("data/owid-covid-data.csv"))
 
 We have been living with COVID-19 for a long time since the beginning of 2020, as of 1 September 2021, more than 218 million cases and 4.52 million deaths have been confirmed, making it one of the deadliest pandemics in history. Besides that the pandemic has resulted in severe global social and economic disruption, including the largest global recession since the Great Depression of the 1930s. 
 
-Therefore, the analysis of the virus is very valuable. In this blog post, I will first introduce the basic knowledge of the virus and then focus on the current situation of COVID-19 in the Netherlands.
+Therefore, the analysis of the virus is very valuable. In this blog post, I will first introduce the basic knowledge of the virus and then focus on the current situation of COVID-19 in the **Netherlands**.
 
 ## <i class="fa fa-medical"></i>What is Covid-19
 
@@ -122,7 +123,7 @@ confirmed = html("Total confirmed cases <br>(case)"),
 death = html("Total death <br>(case)")
 )
 ```
-From table \@ref(tab:caseglotb), We can see that globally, on 2021-08-31, there have been `r glotbdata$confirmed` confirmed cases of COVID-19, including `r glotbdata$death` deaths, reported to WHO. COVID-19 has already caused us so much loss and pain.
+From table \@ref(tab:caseglotb), We can see that globally, on 2021-08-31, there have been**`r glotbdata$confirmed`** confirmed cases of COVID-19, including **`r glotbdata$death`** deaths, reported to WHO. COVID-19 has already caused us so much loss and pain.
 
 ```{r caseglodaily}
 mapdata <- co %>% 
@@ -160,7 +161,7 @@ addLayersControl(overlayGroups = c("Death","Confirm") ,
 ```
 (You can select the data type you want to see in the upper right pane. Put mouse on each circle you can see the detail about country names and the number of them.)
 
-The figure \@ref(fig:casedmap) show us the reported cases on 2021-08-31. In terms of daily numbers, the main confirmations of late have been in America, Europe or South-east Asia. Perhaps due to differences in government policies, culture, surveillance, accuracy of reporting and so on, the number of confirmed cases in east Asia and Africa is relatively low. The distribution of death data also roughly matched that of confirmed cases.
+The figure \@ref(fig:casedmap) show us the reported cases on 2021-08-31. In terms of daily numbers, the main confirmations of late have been in **America**, **Europe** or **South-east Asia**. Perhaps due to differences in government policies, culture, surveillance, accuracy of reporting and so on, the number of confirmed cases in east Asia and Africa is relatively low. The distribution of death data also roughly matched that of confirmed cases.
 
 # <i class="fa fa-virus"></i>Covid-19 in Netherlands
 
@@ -168,7 +169,7 @@ The figure \@ref(fig:casedmap) show us the reported cases on 2021-08-31. In term
 knitr::include_graphics("https://raw.githubusercontent.com/Jiayingttkx/For-assessment/master/Netherlands.png")
 ```
 
-The Netherlands, informally Holland,is a country located in Western Europe with territories in the Caribbean. It is the largest of four constituent countries of the Kingdom of the Netherlands.In Europe, the Netherlands consists of twelve provinces, bordering Germany to the east, Belgium to the south, and the North Sea to the northwest, with maritime borders in the North Sea with those countries and the United Kingdom 
+The **Netherlands**, informally Holland,is a country located in Western Europe with territories in the Caribbean. It is the largest of four constituent countries of the Kingdom of the Netherlands.In Europe, the Netherlands consists of twelve provinces, bordering Germany to the east, Belgium to the south, and the North Sea to the northwest, with maritime borders in the North Sea with those countries and the United Kingdom 
 
 The following analysis focus on Covid-19 in Netherlands. The Netherlands has seen a recent decline in cases of COVID-19 infections and deaths, possibly due to previous restrictions. But some recent policies, such as the opening of tourism and entertainment venues, still increase the potential for a rebound. Below, I will analyze the number of COVID-19 infections and deaths, trends,the number of people vaccinated and Government Stringency Index.
 
@@ -203,7 +204,7 @@ DT::datatable(dailytb, options = list(pageLength = 4))
 ```
 The figure \@ref(fig:dailycasetable) before you can search the definete date to know the accurate determined, death, active cases number at that day.
 
-COVID-19 is still raging in the Netherlands, with nearly 3,000 confirmed cases and there is a sign of rebound compared to previous weeks.
+COVID-19 is still raging in the Netherlands, with nearly **3,000** confirmed cases and there is a sign of rebound compared to previous weeks.
 
 ```{r casenether,fig.cap="Cases in Netherlands"}
 dailyline <- dailytb %>%
@@ -221,11 +222,40 @@ ggplot( aes(x= date, y=cases, group=type, color=type)) +
   theme_minimal() 
 ggplotly(dailyline)
 ```
+```{r deathdata}
+deathdata <- dailytb %>% 
+  select(death) %>% 
+  mutate(death = ifelse(death < 0, -death, death)) %>% 
+  summary(death) %>% 
+  as.data.frame() %>% 
+  select(Summary_of_death_data = Freq) 
+```
+
+```{r deathtable}
+deathdata %>% 
+knitr::kable(caption="Summary about death number",booktabs = TRUE) %>%
+kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+
+
+
+
+
+
+ 
+
+
 The figure \@ref(fig:casenether) show us the trend of COVID-19 diagnoses, deaths and recoveries in the Netherlands. 
+
+The table \@ref(tab:deathtable) shows us the summary about death number in Netherlands.
 
 - We can see that the fatality rate of COVID-19 is not very high, but we can see that the number of people recovering from COVID-19 is very low compared to the number of confirmed cases. We have reason to suspect that most people are self-curing at home and have not reported the recovery information to the government. 
 
-- In terms of the number of confirmed cases, the Number of confirmed cases in the Netherlands has experienced many rounds of rebound since October 2020, with no downward trend at the peak of each rebound. We can speculate that this may be due to the government's lockdown policy caused the number of confirmed cases to fluctuate. But we can also see how serious COVID-19 is. Government lockdown policies alone are not enough to control COVID-19, so this also shows the importance of vaccination. 
+- The death summary show the daily number of COVID-19 deaths peaked at more than **230** and the daily average remains above **31**. 
+
+- In terms of the number of confirmed cases, the Number of confirmed cases in the Netherlands has experienced **many rounds** of rebound since October 2020, with no downward trend at the peak of each rebound. We can speculate that this may be due to the government's lockdown policy caused the number of confirmed cases to fluctuate. But we can also see how serious COVID-19 is. Government lockdown policies alone are not enough to control COVID-19, so this also shows the importance of vaccination. 
+
 
 The following paragraph briefly describes COVID-19 vaccination in the Netherlands.
 
@@ -254,7 +284,7 @@ vactbdata %>%
 knitr::kable(caption="Vaccine Uptake rate",booktabs = TRUE) %>%
 kable_styling(bootstrap_options = c("striped", "hover"))
 ```
-The table \@ref(tab:vacrate) shows the vaccination rates for COVID-19 vaccines in the Netherlands. As of 25 August 2020, the one-dose rate was `r vactbdata$one_dose_rate` and the full-dose rate was `r vactbdata$full_dose_rate`.
+The table \@ref(tab:vacrate) shows the vaccination rates for COVID-19 vaccines in the Netherlands. As of 25 August 2020, the one-dose rate was **`r vactbdata$one_dose_rate`** and the full-dose rate was**`r vactbdata$full_dose_rate`**.
 
 
 ```{r vacbardata}
@@ -280,9 +310,9 @@ ggplotly(vacbar)
 
 The figure \@ref(fig:vaccar) shows the trend of vaccination in the Netherlands. 
 
-- Overall, there has been a recent decline in the number of vaccinations, perhaps because those who are willing to be vaccinated have been mostly vaccinated before. 
+- Overall, there has been a recent **decline** in the number of vaccinations, perhaps because those who are willing to be vaccinated have been mostly vaccinated before. 
 
-- But we can still see that there is still a large percentage of people who don't get the second dose. The Dutch government still needs to do more to encourage people to get vaccinated.
+- But we can still see that there is still a large percentage of people who **don't get the second dose**. The Dutch government still needs to do more to encourage people to get vaccinated.
 
 ```{r vacweeklydata}
 vactbwdata <- vacdata %>% 
@@ -349,7 +379,7 @@ ggplotly(testnetherper)
 
 (Each dot represents a country, you can use the mouse to explore the specific value of each dot, the red dot represents the Netherlands)
 
-The figure \@ref(fig:testdot) shows the number of people tested and diagnosed for COVID-19 per one million people in each country. The Netherlands, represented by the red dots, has a lower number but a higher number of confirmed cases than other countries. If conditions permit, it is suggested that the government still needs to increase the number of virus tests.
+The figure \@ref(fig:testdot) shows the number of people tested and diagnosed for COVID-19 per one million people in each country. The Netherlands, represented by the red dots, has a **lower number of test** but a **higher number of confirmed cases** than other countries. If conditions permit, it is suggested that the government still needs to increase the number of virus tests.
 
 
 
@@ -369,7 +399,7 @@ DT::datatable(hospitalnetherdata, options = list(pageLength = 3))
 
 (Enter the date in the search bar and you will see the number of people in hospital and ICU that day.)
 
-The figure \@ref(fig:hosptb) shows the number of people in hospital and ICU each day. The number of recent COVID-19 patients in the ICU remains over 200, and the number of hospitalizations remains over 400.
+The figure \@ref(fig:hosptb) shows the number of people in hospital and ICU each day. The number of recent COVID-19 patients in the ICU remains over **200**, and the number of hospitalizations remains over **400**.
 
 
 ```{r hospitalereadata}
@@ -389,9 +419,9 @@ ggplotly(hosiptalcar)
 
 The figure \@ref(fig:hosiptalcar) shows the trend of hospitalizations and ICU admissions for COVID-19. 
 
-- It can be seen that both values reached their peak rapidly in April 2020, with the number of inpatients exceeding 4000 and the number of ICU patients nearly 1500. 
+- It can be seen that both values reached their peak rapidly in April 2020, with the number of inpatients exceeding **4000** and the number of ICU patients nearly **1500**. 
 
-- The number of both also high from October 2020 to May 2021, with the number of hospitalizations hovering around 1500 for a long time and the number of ICU patients hovering around 700. 
+- The number of both also high from October 2020 to May 2021, with the number of hospitalizations hovering around **1500** for a long time and the number of ICU patients hovering around **700**. 
 
 - While recent hospitalizations and ICU numbers have declined, there has been a small rebound since July 2021. The COVID-19 situation remains tense and we cannot relax.
 
@@ -417,13 +447,13 @@ ggplot( aes(x= date,
   theme_minimal() 
 ggplotly(policynetherline)
 ```
-The figure \@ref(fig:hosiptalcar) shows how governmental response has changed over time. 
+The figure \@ref(fig:policyline) shows how governmental response has changed over time. 
 
 It shows the Government Stringency Index – a composite measure of the strictness of policy responses.The index on any given day is calculated as the mean score of nine policy measures, each taking a value between 0 and 100. See the authors’ full description of how this index is calculated.A higher score indicates a stricter government response (i.e. 100 = strictest response).
 
-- We can see that the Government Stringency Index was at its highest when the epidemic rebounded in February this year and even exceeded the first major outbreak in April 2020. 
+- We can see that the Government Stringency Index was at its **highest** when the epidemic rebounded in February this year and even exceeded the first major outbreak in April 2020. 
 - The trend of government policy intensity is similar to the trend of the number of confirmed cases, which is reasonable.
-- But we still need to pay attention to the recent relaxation of the regulatory policy, and we need to be careful of the rebound of covid due to the it.
+- But we still need to pay attention to the recent **relaxation** of the regulatory policy, and we need to be careful of the rebound of covid due to the it.
 
 
 If you want to know latest policy please search [Government of the Netherlands](https://www.government.nl/topics/coronavirus-covid-19). 
@@ -431,30 +461,30 @@ If you want to know latest policy please search [Government of the Netherlands](
 
 # Conclusion
 
-COVID-19 is still raging around the world today and has taken a huge toll on humanity.
+COVID-19 is still **raging** around the world today and has taken a huge toll on humanity.
 
-In Netherlands, although the number of confirmed cases has decreased recently, there are still signs of a rebound.
+In Netherlands, although the number of confirmed cases has **decreased** recently, there are still signs of a rebound.
 
-- In terms of prevention, vaccines remain the dominant approach. But the number of COVID-19 vaccinations in the Netherlands has dropped recently, and there are still many people who have not completed the second dose.
+- In terms of prevention, vaccines remain the dominant approach. But the number of COVID-19 vaccinations in the Netherlands has **dropped** recently, and there are still many people who have not completed the second dose.
 
-- In terms of testing, the detection rate in the Netherlands is still low compared to other countries, and the diagnosis rate is high.
+- In terms of testing, the detection rate in the Netherlands is still **low** compared to other countries, and the diagnosis rate is high.
 
-- In terms of treatment, the number of hospitalizations and ICU patients is still very high, although there has been a significant decrease from the previous period.
+- In terms of treatment, the number of hospitalizations and ICU patients is still very **high**, although there has been a significant decrease from the previous period.
 
-- In terms of policy, the Dutch government has recently eased restrictions on COVID-19, but we still need to be careful about the rebound.
+- In terms of policy, the Dutch government has recently **eased** restrictions on COVID-19, but we still need to be careful about the rebound.
 
 
 While the virus is still raging, there are some hopeful signs that this health crisis will end. Countries are succeeding in containing the virus using social-distancing practices, testing, and contact tracing, at least for now, and treatments and vaccines may develop sooner than expected.
 
 I hope all of us can establish a correct understanding of the virus, not too panic, but also actively protect ourself and pay attention to the information around us.
 
-Thanks for reading, if you have any comments and suggestions, please contact me through the contact information in about me page.
+*Thanks for reading, if you have any comments and suggestions, please contact me through the contact information in about me page.*
 
 ## Acknowledgments {.appendix}
 
 - The following packages are used to produce this report:
 tidyverse [@R-tidyverse], leaflet [@R-leaflet], ggplot2 [@R-ggplot2], plotly [@R-plotly], viridis[@R-viridis], gt [@R-gt], hrbrthemes [@R-hrbrthemes], kableExtra[@R-kableExtra].
-- The basic knowledge about covid-19 and Netherlands is from @wikico and @2021CD-C.
+- The basic knowledge about covid-19 and Netherlands is from @wikico , @Gov and @2021CD-C.
 
 
 
