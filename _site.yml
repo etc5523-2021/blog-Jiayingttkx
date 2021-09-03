@@ -1,13 +1,17 @@
-name: "Jiayingttkx"
-title: "My Blog"
+title: "JIAYING'S BLOG"
 description: |
   My Blog
 output_dir: "docs" 
 navbar:
   left:
+    - icon: fab fa-solid fa-blog
+  right:
     - text: "Home"
       href: index.html
-    - text: "Post"
-      href: post2.html 
+    - text: "About Me"
+      href: about.html 
+    - icon: fab fa-github
+      href: https://github.com/etc5523-2021/blog-Jiayingttkx
 output: distill::distill_article
-css: styles.css
+css: "styles.css"
+

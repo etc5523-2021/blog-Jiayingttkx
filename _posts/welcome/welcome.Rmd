@@ -1,26 +1,37 @@
 ---
-title: "Welcome to My Blog"
-description: |
-  Welcome to our new blog, My Blog. We hope you enjoy 
-  reading what we have to say!
-author:
-  - name: Nora Jones 
-    url: https://example.com/norajones
-    affiliation: Spacely Sprockets
-    affiliation_url: https://example.com/spacelysprokets
+title: "Welcome to Jiaying's Blog"
 date: 09-01-2021
 output:
   distill::distill_article:
-    self_contained: false
+  css: "style.css"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-
-# Learn more about creating blogs with Distill at:
-# https://rstudio.github.io/distill/blog.html
-
 ```
 
+```{css, echo = FALSE}
+.distill-site-nav {
+    color: rgba(255, 255, 255, 0.8);
+    background-color: #2793e8;
+    font-size: 15px;
+    font-weight: 300;
+}
+h1{
+  color: #2793e8;
+}
+h2{
+  color: #666666;
+}
+.p{
+  color: #666666;
+}
+```
 
+Welcome to Jiaying's Blog. I hope you enjoy reading it!
 
+Contact me through :
+
+<i class="fa fa-github"></i> [Jiaying Zhang](https://github.com/Jiayingttkx)
+
+<i class="fa fa-weibo"> </i> [Jiaying Zhang](https://weibo.com/u/6553328377/home)

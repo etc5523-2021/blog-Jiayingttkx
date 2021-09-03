@@ -1,19 +1,24 @@
 ---
-title: "Covid-19 in Netherlands"
+title: " Latest Posts "
 date: "`r Sys.Date()`"
-output: 
-  bookdown::html_document2:
-    css: "style.css"
-    theme: journal
-    toc: yes
-    toc_float: yes
-bibliography: reference.bib
-biblio-style: authoryear-comp
+site: distill::distill_website
+listing: posts
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
-library(tidyverse)
+```{css, echo = FALSE}
+.distill-site-nav {
+    color: rgba(255, 255, 255, 0.8);
+    background-color: #2793e8;
+    font-size: 15px;
+    font-weight: 300;
+}
+h1{
+  color: #2793e8;
+}
+h2{
+  color: #666666;
+}
+.p{
+  color: #666666;
+}
 ```
 
-# Jiaying

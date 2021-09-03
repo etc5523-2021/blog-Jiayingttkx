@@ -1,9 +1,16 @@
 ---
 title: "About this blog"
-description: |
-  Some additional details about the blog
+css: "style.css"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
+Welcome to Jiaying's Blog. I hope you enjoy reading it!
+
+For feedbacks or suggestions please contact me through :
+
+<i class="fa fa-github"></i> [Jiaying Zhang](https://github.com/Jiayingttkx)
+
+<i class="fa fa-weibo"> </i> [Jiaying Zhang](https://weibo.com/u/6553328377/home)
