@@ -8,9 +8,10 @@ The URL of this blog is [https://etc5523-2021.github.io/blog-Jiayingttkx/].
 
 This assessment is due Fri Sep 3 2021 11.55PM AEST.
 
-My selected country is [Netherlands].
+My selected country is [Netherlands]. 
 
 The relevant blog post for this assessment is in [Netherlands].html
+(https://etc5523-2021.github.io/blog-Jiayingttkx/posts/Covid-19%20in%20Netherlands/)
 
 - [x] Selected a country
 - [x] Website with R markdown 
@@ -27,6 +28,7 @@ The relevant blog post for this assessment is in [Netherlands].html
 This assessment is due Fri Sep 17 2021 11.55PM AEST.
 
 My selected country is [Poland].
+(https://etc5523-2021.github.io/blog-Jiayingttkx/posts/Covid-19%20in%20poland/)
 
 The relevant blog post for this assessment is in [Poland].html
 

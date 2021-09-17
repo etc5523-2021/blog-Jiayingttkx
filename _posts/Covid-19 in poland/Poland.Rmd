@@ -1,5 +1,5 @@
 ---
-title: "Covid-19 in Netherlands"
+title: "Covid-19 in Poland"
 description: |
  This post contains information about COVID-19 in Poland. Data are as of September 16, 2021.
 author:
@@ -14,7 +14,7 @@ output:
     theme: theme.css
     self_contained: false
 bibliography: ../../reference.bib
-preview: ../../images/fusion-medical-animation-rnr8D3FNUNY-unsplash.jpg
+preview: Figures/Managing-fear-and-easing-lockdown-in-Poland.webp
 ---
 
 ```{r setup, include=FALSE}
@@ -24,9 +24,10 @@ library(leaflet)
 library(ggplot2)
 library(plotly)
 library(viridis)
-library(gt)
 library(hrbrthemes)
 library(kableExtra)
+library(gganimate)
+library(gt)
 ```
 
 ```{css, echo = FALSE}
@@ -54,10 +55,10 @@ co <- read.csv("https://raw.githubusercontent.com/RamiKrispin/coronavirus/master
 ```
 
 ```{r loadvaccinedata}
-vacdata <- readr::read_csv(here::here("data/vaccine.csv"))
+vacdata <- readr::read_csv(here::here("data/polandvac.csv"))
 ```
 ```{r testgovdata}
-testgovdata <- readr::read_csv(here::here("data/owid-covid-data.csv"))  
+testgovdata <- readr::read_csv(here::here("data/owid-covid-data2.txt"))  
 ```
 
 
@@ -65,33 +66,13 @@ testgovdata <- readr::read_csv(here::here("data/owid-covid-data.csv"))
 
 We have been living with COVID-19 for a long time since the beginning of 2020, as of 1 September 2021, more than 218 million cases and 4.52 million deaths have been confirmed, making it one of the deadliest pandemics in history. Besides that the pandemic has resulted in severe global social and economic disruption, including the largest global recession since the Great Depression of the 1930s. 
 
-Therefore, the analysis of the virus is very valuable. In this blog post, I will first introduce the basic knowledge of the virus and then focus on the current situation of COVID-19 in the **Netherlands**.
+Therefore, the analysis of the virus is very valuable. In this blog post, I will first introduce the basic knowledge of the virus and then focus on the current situation of COVID-19 in the **Poland**.
 
-## <i class="fa fa-medical"></i>What is Covid-19
+## What is Covid-19
 
 The COVID-19 pandemic, also known as the coronavirus pandemic, is an ongoing global pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).
 
 COVID-19 symptoms range from unnoticeable to life-threatening. Severe illness is more likely in elderly patients, as well as those who have certain underlying medical conditions. The disease transmits when people breathe in air contaminated by droplets and small airborne particles. The risk of breathing these in is highest when people are in close proximity, but still present over longer distances, particularly indoors. Transmission can also occur if splashed or sprayed with contaminated fluids in the eyes, nose, or mouth, and, rarely, via contaminated surfaces. People remain contagious for up to 20 days, and can spread the virus even if they do not develop any symptoms.
-
-### Symptoms & Prevention
-
-COVID-19 affects different people in different ways. Most infected people will develop mild to moderate illness and recover without hospitalization.Most common symptoms are fever,dry cough and tiredness
-
-To prevent the spread of COVID-19:
-
-- Maintain a safe distance from others, even if they don’t appear to be sick.
-
-- Wear a mask in public, especially indoors or when physical distancing is not possible.
-
-- Choose open, well-ventilated spaces over closed ones. Open a window if indoors.
-
-- Clean your hands often. Use soap and water, or an alcohol-based hand rub.
-
-- Get vaccinated when it’s your turn. Follow local guidance about vaccination.
-
-- Cover your nose and mouth with your bent elbow or a tissue when you cough or sneeze.
-
-- Stay home if you feel unwell.
 
 
 # Data description
@@ -100,7 +81,7 @@ There are three datasets be used in this post one is from @RamiKrispin ,@ecdc an
 
 The first dataset was downloaded from the Github repository of [RamiKrispin's github Repository]("https://github.com/RamiKrispin/coronavirus/blob/master/data/coronavirus.rda"). This dataset has `r nrow(co)` number of observations and `r ncol(co)` number of variables. It is about the number of cases which is confirmed, recover or dead beacuse of covid-19 in each country, it cover the data from 2020-01-22 and @Hopkins updated on a daily bases. Because of it we can get the newest information from it. The raw data pulled from the Johns [Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus repository]("https://github.com/CSSEGISandData/COVID-19").  
 
-The second dataset was maintained by [European Centre for Disease Prevention and Control]("https://www.ecdc.europa.eu/en/publications-data/data-covid-19-vaccination-eu-eea"). This dataset has `r nrow(vacdata)` number of observations and `r ncol(vacdata)` number of variables. It is about the data on COVID-19 vaccination in the EU/EEA and updated twice a week (every Tuesday and Friday). This data covers data from the 52nd week of 2020 to the 35th week of 2021. 
+The second dataset was maintained by [European Centre for Disease Prevention and Control]("https://www.ecdc.europa.eu/en/publications-data/data-covid-19-vaccination-eu-eea"). This dataset has `r nrow(vacdata)` number of observations and `r ncol(vacdata)` number of variables. It is about the data on COVID-19 vaccination in the EU/EEA and updated twice a week (every Tuesday and Friday). This data covers data from the 52nd week of 2020 to the 37th week of 2021. 
 
 The third dataset is from [owid's github Repository]("https://github.com/owid/covid-19-data/tree/master/public/data/"). This dataset has `r nrow(testgovdata)` number of observations and `r ncol(testgovdata)` number of variables. It covers information on diagnoses, hospitals and government response capacity in each country. It is also updated daily. This data covers data from 2020-01-01 until now. 
 
@@ -125,24 +106,24 @@ glotbdata <- co%>% select(type, cases) %>%
 ```{r caseglotb}
 gt(glotbdata ,caption = "Global overview") %>%
 tab_header(title = "Global overview",
-subtitle = " Total cases from 2020-01-22 to 2021-08-31") %>%
+subtitle = " Total cases from 2020-01-22 to 2021-09-15") %>%
 tab_source_note(md("Source: *Hopkins University Center for Systems Science and Engineering*")) %>% 
 cols_label(
 confirmed = html("Total confirmed cases <br>(case)"),
 death = html("Total death <br>(case)")
 )
 ```
-From table \@ref(tab:caseglotb), We can see that globally, on 2021-08-31, there have been**`r glotbdata$confirmed`** confirmed cases of COVID-19, including **`r glotbdata$death`** deaths, reported to WHO. COVID-19 has already caused us so much loss and pain.
+From table \@ref(tab:caseglotb), We can see that globally, as of 2021-09-15, there have been**`r glotbdata$confirmed`** confirmed cases of COVID-19, including **`r glotbdata$death`** deaths, reported to WHO. COVID-19 has already caused us so much loss and pain.
 
 ```{r caseglodaily}
 mapdata <- co %>% 
   mutate(date= as.Date(date)) %>% 
-  filter(date == "2021-08-31") %>% 
+  filter(date == "2021-09-15") %>% 
 mutate(cases = ifelse(cases < 0, 0, cases))
 ```
 
 
-```{r casedmap,fig.cap="Global map about comfirmed and death cases on 2021-08-31"}
+```{r casedmap,fig.cap="Global map about comfirmed and death cases on 2021-09-15"}
 death <- mapdata %>%  filter(type == "death")
 confirm <- mapdata %>%  filter(type == "confirmed")
 
@@ -170,22 +151,25 @@ addLayersControl(overlayGroups = c("Death","Confirm") ,
 ```
 (You can select the data type you want to see in the upper right pane. Put mouse on each circle you can see the detail about country names and the number of them.)
 
-The figure \@ref(fig:casedmap) show us the reported cases on 2021-08-31. In terms of daily numbers, the main confirmations of late have been in **America**, **Europe** or **South-east Asia**. Perhaps due to differences in government policies, culture, surveillance, accuracy of reporting and so on, the number of confirmed cases in east Asia and Africa is relatively low. The distribution of death data also roughly matched that of confirmed cases.
+The figure \@ref(fig:casedmap) show us the reported cases on 2021-09-15. In terms of daily numbers, the main confirmations of late have been in **America**, **Europe** or **South-east Asia**. Perhaps due to differences in government policies, culture, surveillance, accuracy of reporting and so on, the number of confirmed cases in east Asia and Africa is relatively low. The distribution of death data also roughly matched that of confirmed cases.
 
-# <i class="fa fa-virus"></i>Covid-19 in Netherlands
+# Covid-19 in Poland
 
 ```{r flag}
-knitr::include_graphics("https://raw.githubusercontent.com/Jiayingttkx/For-assessment/master/Netherlands.png")
+knitr::include_graphics("https://raw.githubusercontent.com/Jiayingttkx/For-assessment/master/main_poland-map.webp")
 ```
 
-The **Netherlands**, informally Holland,is a country located in Western Europe with territories in the Caribbean. It is the largest of four constituent countries of the Kingdom of the Netherlands.In Europe, the Netherlands consists of twelve provinces, bordering Germany to the east, Belgium to the south, and the North Sea to the northwest, with maritime borders in the North Sea with those countries and the United Kingdom 
+**Poland**, officially the Republic of Poland,is a country located in Central Europe. It is divided into 16 administrative provinces, covering an area of 312,696 km2 (120,733 sq mi), and has a largely temperate seasonal climate.Poland has a population of nearly 38.5 million people, and is the fifth-most populous member state of the European Union.Warsaw is the nation's capital and largest metropolis.
 
-The following analysis focus on Covid-19 in Netherlands. The Netherlands has seen a recent decline in cases of COVID-19 infections and deaths, possibly due to previous restrictions. But some recent policies, such as the opening of tourism and entertainment venues, still increase the potential for a rebound. Below, I will analyze the number of COVID-19 infections and deaths, trends,the number of people vaccinated and Government Stringency Index.
+The following analysis focus on Covid-19 in Poland. The Poland has seen a recent decline in cases of COVID-19 infections and deaths, possibly due to previous restrictions. But some recent policies, such as the opening of tourism and entertainment venues, still increase the potential for a rebound. Below, I would like to present an overview of the development and current situation of COVID-19 in Poland from two aspects: infection and vaccination.
 
-## <i class="fa fa-stethoscope"></i>Covid-19 Cases 
-```{r netherdata}
-co_nether_daily <- co %>% 
-  filter(country == "Netherlands") %>% 
+## <i class="fa fa-stethoscope"></i> Story1 : Covid-19 Cases in Poland
+
+In this section, we can see the development of the number of CONFIRMED COVID-19 cases, deaths, recoveries and virus tests in Poland.
+
+```{r q1casedata}
+co_poland_daily <- co %>% 
+  filter(country == "Poland") %>% 
   group_by(date, type) %>%
   summarise(total = sum(cases, na.rm = TRUE),
                    .groups = "drop") %>%
@@ -200,288 +184,181 @@ co_nether_daily <- co %>%
                 active_cum = cumsum(active))
 ```
 
-```{r tablecase}
-dailytb <- co_nether_daily %>% 
+```{r q1areadata}
+dailytb <- co_poland_daily %>% 
   select(date, confirmed, death, recovered, active) %>% 
   arrange(desc(date)) %>%  
   mutate(recovered = ifelse(recovered < 0, 0, recovered)) %>% mutate(active = ifelse(date =="2021-08-05", "3465", active)) %>% 
   mutate(active = as.numeric(active))
 ```
 
-```{r dailycasetable,fig.cap="Trend of total cases in a month each year"}
-DT::datatable(dailytb, options = list(pageLength = 4))
-```
-The figure \@ref(fig:dailycasetable) before you can search the definete date to know the accurate determined, death, active cases number at that day.
-
-COVID-19 is still raging in the Netherlands, with nearly **3,000** confirmed cases and there is a sign of rebound compared to previous weeks.
-
-```{r casenether,fig.cap="Cases in Netherlands"}
+```{r q1area,fig.cap="Cases in Poland"}
 dailyline <- dailytb %>%
   select(-active) %>% 
 pivot_longer(cols = -date,
              names_to = "type", 
              values_to = "cases") %>% 
   mutate(date= as.Date(date)) %>% 
-ggplot( aes(x= date, y=cases, group=type, color=type)) +
-    geom_line()+
-  scale_x_date(date_labels =  "%b %d")+
+ggplot( aes(x= date, y=cases, fill=type)) +
+    geom_area()+ 
+  facet_wrap(~type, ncol = 1, scales = "free_y")+
     scale_color_viridis(discrete = TRUE) +
-    ggtitle("Cases in Netherlands") +
+    ggtitle("Cases in Poland") +
     ylab("Number of cases")+
   theme_minimal() 
 ggplotly(dailyline)
 ```
-```{r deathdata}
-deathdata <- dailytb %>% 
-  select(death) %>% 
-  mutate(death = ifelse(death < 0, -death, death)) %>% 
-  summary(death) %>% 
-  as.data.frame() %>% 
-  select(Summary_of_death_data = Freq) 
+
+The figure \@ref(fig:q1area) show us the trend of **COVID-19 diagnoses**, **deaths** and **recoveries** in the Polannd. In general, all three values experienced **two peaks**, in **November and December 2020** and **March and April 2021**. And the number of deaths and recoveries peaked later than the number of confirmed cases.
+
+- The **highest number** of COVID-19 cases was on April 1, 2021, when more than **35,000** cases were confirmed in a single day. But the number of confirmed COVID-19 cases has dropped **significantly recently**, reaching 37 in a single day in July 2020. However, there has been a slight uptick in the number of confirmed cases, rising to 724 on September 16, 2020.
+
+- The **highest number** of COVID-19 deaths in Poland also occurred in **April 2020**, when **956** people died in a single day on 8 April 2020. But the daily death toll has dropped sharply recently, remaining steady at around 10. And the number of deaths fluctuates less sharply than the other two.
+
+- The **peak** of COVID-19 recovery cases in Poland also occurred in **April 2020**, with more than **35,000** people recovering in a single day on 10 April 2020. Compared with the number of confirmed cases, the recovery rate is relatively high.
+
+Overall, the recovery rate from COVID-19 is still relatively high. However, the death data and recent rebound in diagnoses cannot be ignored. Are these figures reliable? Are there many people who have not been tested for COVID-19? Below is information on virus testing and diagnosis rates.
+
+```{r q1dotdata}
+ testpoland2 <- testgovdata %>% 
+   select(date, location, new_tests_smoothed_per_thousand, new_cases, population) %>%
+  na.omit() %>% 
+  mutate(dailyconfirm = abs(new_cases/population*1000000),
+         dailytest = new_tests_smoothed_per_thousand *1000) %>% 
+  select(location,
+         date,
+         dailytestper = dailytest,
+        dailyconfirmper= dailyconfirm)%>%
+  group_by(location) %>% 
+  summarise(dailytestper = mean(dailytestper),
+            dailyconfirmper = mean(dailyconfirmper))
 ```
 
-```{r deathtable}
-deathdata %>% 
-knitr::kable(caption="Summary about death number",booktabs = TRUE) %>%
-kable_styling(bootstrap_options = c("striped", "hover"))
+```{r q1dot,fig.cap="Daily tests vs. Daily new confirmed cases per million"}
+ testpoland2doc <-  testpoland2  %>%
+  ggplot(aes(x=dailyconfirmper, y=dailytestper, label = location)) +
+    geom_point(alpha=0.5)+
+  geom_point(data=testpoland2 [testpoland2 $location == "Poland", ], colour="red")+
+labs(x = "Daily confirmed cases per million people", 
+     y = "Daily tests per million people", 
+     title = "Daily tests vs. Daily new confirmed cases per million people") 
+ggplotly( testpoland2doc)
 ```
 
+(Each dot represents a country, you can use the mouse to explore the specific value of each dot, the red dot represents the Poland)
 
+This graph \@ref(fig:q1dot) shows the average number of COVID-19 **tests** and **diagnoses** per million people in Poland. Of all the countries, Poland's **testing rate** was very **low**, about 1,038 tests per million people, but the number of confirmed cases reached 158. Overall, compared with other countries, the number of **confirmed rate** in Poland is relatively **high**. But it also shows that Poland's tests may not have been enough.
 
+The main effective response to COVID-19 right now is a vaccine. Below is information about vaccination in Poland.
 
-
-
-
- 
-
-
-The figure \@ref(fig:casenether) show us the trend of COVID-19 diagnoses, deaths and recoveries in the Netherlands. 
-
-The table \@ref(tab:deathtable) shows us the summary about death number in Netherlands.
-
-- We can see that the fatality rate of COVID-19 is not very high, but we can see that the number of people recovering from COVID-19 is very low compared to the number of confirmed cases. We have reason to suspect that most people are self-curing at home and have not reported the recovery information to the government. 
-
-- The death summary show the daily number of COVID-19 deaths peaked at more than **230** and the daily average remains above **31**. 
-
-- In terms of the number of confirmed cases, the Number of confirmed cases in the Netherlands has experienced **many rounds** of rebound since October 2020, with no downward trend at the peak of each rebound. We can speculate that this may be due to the government's lockdown policy caused the number of confirmed cases to fluctuate. But we can also see how serious COVID-19 is. Government lockdown policies alone are not enough to control COVID-19, so this also shows the importance of vaccination. 
-
-
-The following paragraph briefly describes COVID-19 vaccination in the Netherlands.
-
-
-## <i class="fa fa-syringe"></i>Vaccine 
-
-```{r vacdata}
-vacdatause <- vacdata%>% 
-  filter(ReportingCountry == "NL") %>% 
-  select(YearWeekISO, FirstDose, SecondDose, Population)
-```
-
+## <i class="fa fa-syringe"></i> Story2 : COVID-19 Vaccination in Poland 
 ```{r vacdatasummary}
-vactbdata<- vacdatause %>% 
-  summarise(sumfirst = sum(FirstDose),
-            sumfull = sum(SecondDose),
-            population = Population) %>% 
+vactbdata<-  testgovdata %>%
+  filter(location == "Poland") %>%
+  summarise(sumvac = sum(people_vaccinated, na.rm=TRUE),
+            sumfull = sum(people_fully_vaccinated, na.rm=TRUE),
+            population = 37958138) %>% 
   unique() %>% 
-  mutate(one_dose_rate = sumfirst/population,
+  mutate(vac_dose_rate = sumvac/population,
          full_dose_rate = sumfull/population)
 ```
 
 ```{r vacrate}
 vactbdata %>% 
-  select(one_dose_rate, full_dose_rate)%>%
-knitr::kable(caption="Vaccine Uptake rate",booktabs = TRUE) %>%
+  select(vac_dose_rate, full_dose_rate)%>%
+knitr::kable(caption="Vaccine Uptake rate in Poland",booktabs = TRUE) %>%
 kable_styling(bootstrap_options = c("striped", "hover"))
 ```
-The table \@ref(tab:vacrate) shows the vaccination rates for COVID-19 vaccines in the Netherlands. As of 25 August 2020, the one-dose rate was **`r vactbdata$one_dose_rate`** and the full-dose rate was**`r vactbdata$full_dose_rate`**.
+This table  \@ref(tab:vacrate) shows Poland's **vaccination rates** to date. More than **50 percent** of the population has been **vaccinated**, and more than **37 percent** have been **full vaccinated**. In contrast, the first vaccination rate in the European Union has reached 66 percent, and 60 percent of the population has been full vaccinated. Poland still needs to increase the number of vaccinations.
 
+Below is a chart of the total number of vaccines received per week. 
 
-```{r vacbardata}
-vacbardata <- vacdatause %>% 
-  group_by(YearWeekISO) %>% 
-  summarise(FirstDose = sum(FirstDose),
-            SecondDose = sum(SecondDose))%>% 
-pivot_longer(cols = -YearWeekISO,
-             names_to = "type", 
-             values_to = "dose") 
-```
-
-```{r vaccar,fig.cap="Number of Vaccine uptake in Nwtherlands"}
-vacbar <- ggplot(vacbardata, aes(fill=type, y=dose, x=YearWeekISO)) + 
-    geom_bar(position="stack", stat="identity") +
-    scale_fill_viridis(discrete = T) +
-    ggtitle("Vaccine uptake") +
-    theme_ipsum() +
-    xlab("")+ 
-  theme(axis.text.x = element_blank())
-ggplotly(vacbar)
-```
-
-The figure \@ref(fig:vaccar) shows the trend of vaccination in the Netherlands. 
-
-- Overall, there has been a recent **decline** in the number of vaccinations, perhaps because those who are willing to be vaccinated have been mostly vaccinated before. 
-
-- But we can still see that there is still a large percentage of people who **don't get the second dose**. The Dutch government still needs to do more to encourage people to get vaccinated.
-
-```{r vacweeklydata}
-vactbwdata <- vacdata %>% 
-  filter(ReportingCountry == "NL", YearWeekISO == "2021-W34") %>% 
-  select(FirstDose, SecondDose, Vaccine) 
-```
-
-
-```{r vacwktb}
-gt(vactbwdata,caption = "Vaccine be taken weekly") %>%
-tab_header(title = "Vaccine be taken",
-subtitle = " from 2021-08-23 to 2021-08-29") %>%
-tab_source_note(md("Source: *European Centre for Disease Prevention and Control*")) %>% 
-cols_label(
-FirstDose = html("First Dose<br>(dose)"),
-SecondDose = html("Second Dose<br>(dose)"),
-Vaccine = html("Vaccine<br>(brand)")
-)%>%
-  summary_rows(
-    columns = vars(`FirstDose`, `SecondDose`), 
-    fns = list(total = ~ sum(.)))%>%
-  cols_align(
-    align = "right",
-    columns = 3
-  ) 
-```
-
-The table \@ref(tab:vacwktb) shows the vaccinations from 2021-08-23 to 2021-08-29, and we can see the brands that people were vaccinated with last week. 
-
-- Perhaps because of vaccine availability or demand, people are choosing COM,MOD and JANSS vaccines more often. And what we can see right now is that whether it's the first shot or the second shot, people tend to choose the COM vaccine. 
-
-- In addition to COM, more people are now getting JANSS for the first dose and MOD for the second.
-
-While vaccination is still the primary response to COVID-19 right now, if we are diagnosed we need to take the appropriate steps to treat it. Below is an analysis about COVID-19 testing rates, diagnosis rates, hospitalizations and ICU numbers.
-
-## <i class="fa fa-hospital"></i> Tests & Hospital
-
-
-```{r testdata}
- testnether <- testgovdata %>% 
-   select(date, location, new_tests_smoothed_per_thousand, new_cases, population) %>%
-  na.omit() %>% 
-  group_by(location) %>% 
-  arrange(desc(date)) %>% 
-  slice(1) %>% 
-  mutate(dailyconfirm = new_cases/population*1000000,
-         dailytest = new_tests_smoothed_per_thousand *1000) %>% 
-  select(date,
-         location,
-         dailytestper = dailytest,
-        dailyconfirmper= dailyconfirm)
-```
-
-```{r testdot,fig.cap="Daily tests vs. Daily new confirmed cases per million"}
- testnetherper <- testnether  %>%
-  ggplot(aes(x=dailyconfirmper, y=dailytestper, label = location)) +
-    geom_point(alpha=0.5)+
-  geom_point(data=testnether [testnether $location == "Netherlands", ], colour="red")+
-labs(x = "Daily confirmed cases per million people", 
-     y = "Daily tests per million", 
-     title = "Daily tests vs. Daily new confirmed cases per million") 
-ggplotly(testnetherper)
-```
-
-(Each dot represents a country, you can use the mouse to explore the specific value of each dot, the red dot represents the Netherlands)
-
-The figure \@ref(fig:testdot) shows the number of people tested and diagnosed for COVID-19 per one million people in each country. The Netherlands, represented by the red dots, has a **lower number of test** but a **higher number of confirmed cases** than other countries. If conditions permit, it is suggested that the government still needs to increase the number of virus tests.
-
-
-
-```{r hospdata}
-hospitalnetherdata <- testgovdata %>% 
-  filter(location == "Netherlands") %>% 
-   select(date, 
-          number_of_patients_in_icu = icu_patients, 
-          number_of_patients_in_hospital = hosp_patients) %>% 
-  arrange(desc(date)) %>% 
+```{r q2anidata}
+q2anidata <- testgovdata %>%
+  filter(location == "Poland") %>% 
+  select(date, people_vaccinated, people_fully_vaccinated)%>%
+  pivot_longer(cols = -date,
+               names_to = "type",
+               values_to = "dose") %>% 
   na.omit()
 ```
 
-```{r hosptb,fig.cap="Number of people hospitalizations and ICU each day"}
-DT::datatable(hospitalnetherdata, options = list(pageLength = 3))
-```
 
-(Enter the date in the search bar and you will see the number of people in hospital and ICU that day.)
-
-The figure \@ref(fig:hosptb) shows the number of people in hospital and ICU each day. The number of recent COVID-19 patients in the ICU remains over **200**, and the number of hospitalizations remains over **400**.
-
-
-```{r hospitalereadata}
- hospitalnetherbardata <- hospitalnetherdata %>%
-  pivot_longer(cols = -date,
-               names_to = "type",
-               values_to = "count")
-```
-
-```{r hosiptalcar,fig.cap="Number of Vaccine uptake in Nwtherlands"}
-hosiptalcar <- 
-ggplot(hospitalnetherbardata, aes(x=date, y=count, fill=type)) +
-    geom_area()+ 
-  theme(axis.text.x = element_blank())
-ggplotly(hosiptalcar)
-```
-
-The figure \@ref(fig:hosiptalcar) shows the trend of hospitalizations and ICU admissions for COVID-19. 
-
-- It can be seen that both values reached their peak rapidly in April 2020, with the number of inpatients exceeding **4000** and the number of ICU patients nearly **1500**. 
-
-- The number of both also high from October 2020 to May 2021, with the number of hospitalizations hovering around **1500** for a long time and the number of ICU patients hovering around **700**. 
-
-- While recent hospitalizations and ICU numbers have declined, there has been a small rebound since July 2021. The COVID-19 situation remains tense and we cannot relax.
-
-The following paragraph will use Government Response Stringency Index to show the intensity of Dutch Government policies.
-
-## <i class="fa fa-users"></i>Policy responses
-
-```{r policydata}
- policynetherdata <- testgovdata %>%  
-  filter(location== "Netherlands" ) %>% 
-  select(date, stringency_index)
-```
-
-```{r policyline,fig.cap="Government Response Stringency Index in Netherlands"}
-policynetherline <- policynetherdata %>%
-ggplot( aes(x= date, 
-            y=stringency_index)) +
-    geom_line()+
-  scale_x_date(date_labels =  "%b %d")+
+```{r q2ani,fig.cap="The number of vaccinations"}
+q2ani <- q2anidata %>%
+  ggplot( aes(x=date, y=dose, group=type, color=type)) +
+    geom_line() +
+    geom_point() +
     scale_color_viridis(discrete = TRUE) +
-    ggtitle("Government Response Stringency Index in Netherlands") +
-    ylab("Stringency index")+
-  theme_minimal() 
-ggplotly(policynetherline)
+    ggtitle("The number of vaccinations") +
+    theme_ipsum() +
+    ylab("Number of dose") +
+    transition_reveal(date)
+
+animate(plot = q2ani,
+    render = gifski_renderer(),
+    duration = 12,
+    fps = 20)
+
+anim_save("vac.gif")
 ```
-The figure \@ref(fig:policyline) shows how governmental response has changed over time. 
 
-It shows the Government Stringency Index – a composite measure of the strictness of policy responses.The index on any given day is calculated as the mean score of nine policy measures, each taking a value between 0 and 100. See the authors’ full description of how this index is calculated.A higher score indicates a stricter government response (i.e. 100 = strictest response).
+The figure \@ref(fig:q2ani) shows the trend of vaccination in the Poland. 
 
-- We can see that the Government Stringency Index was at its **highest** when the epidemic rebounded in February this year and even exceeded the first major outbreak in April 2020. 
-- The trend of government policy intensity is similar to the trend of the number of confirmed cases, which is reasonable.
-- But we still need to pay attention to the recent **relaxation** of the regulatory policy, and we need to be careful of the rebound of covid due to the it.
+- In general, the lowest number of people were vaccinated at the beginning and more recently. Both the first and second doses saw the **fastest growth** in **the first half of 2020**, but recent growth has been slow. The first dose has now exceeded 1986.17 million. More than 143.857 million people have been vaccinated. 
+
+- And we can see that almost all of the people who have been vaccinated have **completed** full of their vaccinations, which implies that **fewer people** have chosen to start **vaccination recently**.
+
+Here are the weekly numbers, and we can see the percentage of people choosing different brands of vaccine.
+
+```{r q2vacdata}
+vacdatause <- vacdata%>% 
+  filter(ReportingCountry == "PL") %>% 
+  select(YearWeekISO, FirstDose, SecondDose, Population, Vaccine)
+```
+
+```{r q2bar2data}
+q2bar2data <- vacdatause%>% 
+pivot_longer(cols = FirstDose:SecondDose,
+             names_to = "type", 
+             values_to = "dose")
+```
 
 
-If you want to know latest policy please search [Government of the Netherlands](https://www.government.nl/topics/coronavirus-covid-19). 
+```{r q2bar2, fig.cap="Number of weekly COVID-19 vaccinations by each brand", fig.height = 8 }
+q2bar2 <- 
+  ggplot(q2bar2data, aes(x = YearWeekISO, y = dose, fill =Vaccine)) + 
+  geom_col()+ 
+labs(x = "Week", 
+     y = "Dose", 
+     title = "Number of weekly COVID-19 vaccinations by each brand") +
+  facet_wrap(~type, nrow = 2)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 0.5, vjust = 0.5))
 
+ggplotly(q2bar2)
+```
+
+The figure \@ref(fig:q2bar2) shows the vaccinations from 2021-08-23 to 2021-08-29, and we can see the **brands** that people were vaccinated with last week. 
+
+- The first dose peaked in the **19th week of 2020**, and the second dose peaked in the **23rd week of 2020**. These two peaks also meet the need for the interval between the first and second doses of vaccine. But with both the first and second doses, the number of recent vaccinations has **dropped dramatically**.
+
+- Overall, people were more likely to choose the **COM** vaccine regardless of the first or second dose. In particular, almost no one chose to take other brands of vaccines recently. It should be noted that the second dose cannot be observed in the table because the Johnson & Johnson vaccine requires only one dose.
+
+If you want to know latest policy please search [Government of the Poland](https://www.gov.pl/web/coronavirus). 
 
 # Conclusion
 
 COVID-19 is still **raging** around the world today and has taken a huge toll on humanity.
 
-In Netherlands, although the number of confirmed cases has **decreased** recently, there are still signs of a rebound.
+In Poland, although the number of confirmed cases has **decreased** recently, there are still a lot of new cases every day, still need to pay attention to.
 
-- In terms of prevention, vaccines remain the dominant approach. But the number of COVID-19 vaccinations in the Netherlands has **dropped** recently, and there are still many people who have not completed the second dose.
+- Poland's number of confirmed cases and deaths has reached two **peaks** in November 2020 and March 2021 and **dropped sharply** in recent days from its high point. But compared with recent July, there has been a slight rebound. 
 
-- In terms of testing, the detection rate in the Netherlands is still **low** compared to other countries, and the diagnosis rate is high.
+- Compared with other countries, Poland's **detection rate** was **lower** and **positive rate** was **higher**.
 
-- In terms of treatment, the number of hospitalizations and ICU patients is still very **high**, although there has been a significant decrease from the previous period.
+- Overall, the number of vaccinations in Poland **peaked** in the **first half of 2020**. But vaccination rates are **low** compared with those in the European Union. And there has been a **sharp drop** in the number of vaccinations **recently**. 
 
-- In terms of policy, the Dutch government has recently **eased** restrictions on COVID-19, but we still need to be careful about the rebound.
-
+- And perhaps because of vaccine availability, or personal choice, Poles are more likely to get the **COM** vaccine.
 
 While the virus is still raging, there are some hopeful signs that this health crisis will end. Countries are succeeding in containing the virus using social-distancing practices, testing, and contact tracing, at least for now, and treatments and vaccines may develop sooner than expected.
 
@@ -492,8 +369,8 @@ I hope all of us can establish a correct understanding of the virus, not too pan
 ## Acknowledgments {.appendix}
 
 - The following packages are used to produce this report:
-tidyverse [@R-tidyverse], leaflet [@R-leaflet], ggplot2 [@R-ggplot2], plotly [@R-plotly], viridis[@R-viridis], gt [@R-gt], hrbrthemes [@R-hrbrthemes], kableExtra[@R-kableExtra].
-- The basic knowledge about covid-19 and Netherlands is from @wikico , @Gov and @2021CD-C.
+tidyverse [@R-tidyverse], leaflet [@R-leaflet], ggplot2 [@R-ggplot2], plotly [@R-plotly], viridis[@R-viridis], gganimate [@R-gganimate], gt [@R-gt], hrbrthemes [@R-hrbrthemes], kableExtra[@R-kableExtra].
+- The basic knowledge about covid-19 and Poland is from @wikico , @Govp and @2021CD-C.
 
 
 
